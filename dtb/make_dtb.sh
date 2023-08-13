@@ -9,8 +9,8 @@ set -e
 #   5: invalid file hash
 
 main() {
-    local linux='https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.4.8.tar.xz'
-    local lxsha='c59f34e19e84db30206b9373041abf893f9d8a08765d163586570a5238c458b6'
+    local linux='https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.4.10.tar.xz'
+    local lxsha='980b3fb2a97788fd885cbd85ba4520980f76c7ae1d62bfc2e7477ee04df5f239'
 
     local lf="$(basename "$linux")"
     local lv="$(echo "$lf" | sed -nE 's/linux-(.*)\.tar\..z/\1/p')"
@@ -36,8 +36,8 @@ main() {
     if ! [ -d "linux-$lv" ]; then
         tar xavf "$lf" "linux-$lv/include/dt-bindings" "linux-$lv/include/uapi" "$rkpath"
 
-        local patch patches="$(find patches -maxdepth 1 -name '*.patch' 2>/dev/null || true)"
-        for patch in $patches; do
+        local patch
+        for patch in patches/*.patch; do
             patch -p1 -d "linux-$lv" -i "../$patch"
         done
     fi
