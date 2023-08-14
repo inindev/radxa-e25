@@ -66,6 +66,10 @@ main() {
     local uboot_itb=$(download "$cache" 'https://github.com/inindev/radxa-e25/releases/download/v12.0.1/u-boot.itb')
     [ -f "$uboot_itb" ] || { echo "unable to fetch: $uboot_itb"; exit 4; }
 
+    # dtb
+    local dtb=$(download "$cache" "https://github.com/inindev/radxa-e25/releases/download/v12.0.1/rk3568-radxa-e25.dtb")
+    [ -f "$dtb" ] || { echo "unable to fetch $dtb"; exit 4; }
+
     # setup media
     if [ ! -b "$media" ]; then
         print_hdr "creating image file"
@@ -103,6 +107,9 @@ main() {
     local lfwn=$(basename "$lfw")
     local lfwbn="${lfwn%%.*}"
     tar -C "$mountpt/usr/lib/firmware" --strip-components=1 --wildcards -xavf "$lfw" "$lfwbn/rockchip" "$lfwbn/rtl_bt" "$lfwbn/rtl_nic"
+
+    # install device tree
+    install -vm 644 "$dtb" "$mountpt/boot"
 
     # install debian linux from deb packages (debootstrap)
     print_hdr "installing root filesystem from debian.org"
