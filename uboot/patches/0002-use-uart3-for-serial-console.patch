@@ -1,0 +1,68 @@
+From f95d9b8fcfc6f6a0f76e396e9aba0ace3582a05e Mon Sep 17 00:00:00 2001
+From: John Clark <inindev@gmail.com>
+Date: Tue, 15 Aug 2023 03:40:56 +0000
+Subject: [PATCH 2/2] use uart3 for serial console
+
+Signed-off-by: John Clark <inindev@gmail.com>
+---
+ arch/arm/dts/rk3568-radxa-e25-u-boot.dtsi | 15 ++++++++++++++-
+ configs/radxa-e25-rk3568_defconfig        |  3 ++-
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/dts/rk3568-radxa-e25-u-boot.dtsi b/arch/arm/dts/rk3568-radxa-e25-u-boot.dtsi
+index 572bdc5665..e12dd41e4c 100644
+--- a/arch/arm/dts/rk3568-radxa-e25-u-boot.dtsi
++++ b/arch/arm/dts/rk3568-radxa-e25-u-boot.dtsi
+@@ -4,7 +4,7 @@
+ 
+ / {
+ 	chosen {
+-		stdout-path = &uart2;
++		stdout-path = &uart3;
+ 	};
+ };
+ 
+@@ -27,6 +27,19 @@
+ 	status = "okay";
+ };
+ 
++// pin 3: uart3_rx_m0
++// pin 5: uart3_tx_m0
++// pin 9: ground
++&uart3m0_xfer {
++	bootph-all;
++};
++&uart3 {
++	bootph-all;
++	clock-frequency = <24000000>;
++	pinctrl-0 = <&uart3m0_xfer>;
++	status = "okay";
++};
++
+ &usb_host0_xhci {
+ 	dr_mode = "host";
+ };
+diff --git a/configs/radxa-e25-rk3568_defconfig b/configs/radxa-e25-rk3568_defconfig
+index a905100a79..c9d821ba9c 100644
+--- a/configs/radxa-e25-rk3568_defconfig
++++ b/configs/radxa-e25-rk3568_defconfig
+@@ -15,7 +15,7 @@ CONFIG_SPL_ROCKCHIP_COMMON_BOARD=y
+ CONFIG_SPL_SERIAL=y
+ CONFIG_SPL_STACK_R_ADDR=0x600000
+ CONFIG_SPL_STACK=0x400000
+-CONFIG_DEBUG_UART_BASE=0xFE660000
++CONFIG_DEBUG_UART_BASE=0xFE670000
+ CONFIG_DEBUG_UART_CLOCK=24000000
+ CONFIG_SYS_LOAD_ADDR=0xc00800
+ CONFIG_PCI=y
+@@ -80,6 +80,7 @@ CONFIG_PWM_ROCKCHIP=y
+ CONFIG_SPL_RAM=y
+ CONFIG_SCSI=y
+ CONFIG_DM_SCSI=y
++CONFIG_BAUDRATE=1500000
+ CONFIG_DEBUG_UART_SHIFT=2
+ CONFIG_SYS_NS16550_MEM32=y
+ CONFIG_SYSRESET=y
+-- 
+2.40.1
+

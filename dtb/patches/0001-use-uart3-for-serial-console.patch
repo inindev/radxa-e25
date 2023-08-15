@@ -1,0 +1,39 @@
+From ffdf4efb209d6eee596795d5a2c8a87331438512 Mon Sep 17 00:00:00 2001
+From: John Clark <inindev@gmail.com>
+Date: Tue, 15 Aug 2023 03:52:30 +0000
+Subject: [PATCH] use uart3 for serial console
+
+Signed-off-by: John Clark <inindev@gmail.com>
+---
+ arch/arm64/boot/dts/rockchip/rk3568-radxa-e25.dts | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568-radxa-e25.dts b/arch/arm64/boot/dts/rockchip/rk3568-radxa-e25.dts
+index 63c4bd8..323c885 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3568-radxa-e25.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3568-radxa-e25.dts
+@@ -11,6 +11,10 @@
+ 		mmc1 = &sdmmc0;
+ 	};
+ 
++	chosen {
++		stdout-path = "serial3:1500000n8";
++	};
++
+ 	pwm-leds {
+ 		compatible = "pwm-leds-multicolor";
+ 
+@@ -192,6 +196,10 @@
+ 	status = "okay";
+ };
+ 
++&uart3 {
++	status = "okay";
++};
++
+ &usb_host0_ehci {
+ 	status = "okay";
+ };
+-- 
+2.40.1
+
