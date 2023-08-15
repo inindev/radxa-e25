@@ -36,14 +36,14 @@ main() {
     if ! [ -d "linux-$lv" ]; then
         tar xavf "$lf" "linux-$lv/include/dt-bindings" "linux-$lv/include/uapi" "$rkpath"
 
-        local patch
-        for patch in patches/*.patch; do
+        local patch patches="$(find patches -maxdepth 1 -name '*.patch' 2>/dev/null | sort)"
+        for patch in $patches; do
             patch -p1 -d "linux-$lv" -i "../$patch"
         done
     fi
 
     if is_param 'links' "$@"; then
-        local rkf rkfl='rk3568-radxa-e25.dts rk3568.dtsi rk356x.dtsi rk3568-pinctrl.dtsi rockchip-pinconf.dtsi'
+        local rkf rkfl='rk3568-radxa-e25.dts rk3568-radxa-cm3i.dtsi rk3568.dtsi rk356x.dtsi rk3568-pinctrl.dtsi rockchip-pinconf.dtsi'
         for rkf in $rkfl; do
             ln -sfv "$rkpath/$rkf"
         done
