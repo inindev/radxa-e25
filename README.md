@@ -9,6 +9,15 @@ Most patches are directly available from the Debian repos using the built-in ```
 
 <br/>
 
+The serial console is on uart3:
+```
+pin 3: uart3 rx
+pin 5: uart3 tx
+pin 9: ground
+```
+
+<br/>
+
 ---
 ### debian bookworm setup
 
