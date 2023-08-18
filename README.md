@@ -11,8 +11,8 @@ Most patches are directly available from the Debian repos using the built-in ```
 
 The serial console is on uart3:
 ```
-pin 3: uart3 rx
-pin 5: uart3 tx
+pin 3: rx
+pin 5: tx
 pin 9: ground
 ```
 
@@ -25,7 +25,7 @@ pin 9: ground
 
 **1. download image**
 ```
-https://github.com/inindev/radxa-e25/releases/download/v12.0.1/radxa-e25_bookworm-1201.img.xz
+https://github.com/inindev/radxa-e25/releases/download/v12.0.2/radxa-e25_bookworm-1202.img.xz
 ```
 
 <br/>
@@ -49,7 +49,7 @@ brw-rw---- 1 root disk 8, 0 Apr 10 15:56 /dev/sda
 
 **3. in the case above, substitute 'a' for 'X' in the command below (for /dev/sda)**
 ```
-sudo sh -c 'xzcat radxa-e25_bookworm-1201.img.xz > /dev/sdX && sync'
+sudo sh -c 'xzcat radxa-e25_bookworm-1202.img.xz > /dev/sdX && sync'
 ```
 
 #### when the micro sd has finished imaging, eject and use it to boot the radxa e25 to finish setup
@@ -107,7 +107,7 @@ sudo nano /etc/hosts
 
 <br/>
 
-The build script builds native arm64 binaries and thus needs to be run from an arm64 device such as a odroid m1 running a 64 bit arm linux. The initial build of this project used a debian arm64 odroid m1, but now uses a rock 5b running stock debian bookworm arm64.
+The build script builds native arm64 binaries and thus needs to be run from an arm64 device such as a odroid m1 running a 64 bit arm linux. The initial build of this project used a debian arm64 odroid m1, but now uses a rock 5b running debian trixie arm64.
 
 <br/>
 
