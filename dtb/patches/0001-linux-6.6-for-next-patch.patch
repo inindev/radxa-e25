@@ -1,0 +1,90 @@
+From 60a236b896c4b10eb3e6e508f0d813bf3d372521 Mon Sep 17 00:00:00 2001
+From: John Clark <inindev@gmail.com>
+Date: Fri, 18 Aug 2023 10:22:03 +0000
+Subject: [PATCH 1/2] linux 6.6 for-next patch
+
+Signed-off-by: John Clark <inindev@gmail.com>
+---
+ .../boot/dts/rockchip/rk3568-radxa-e25.dts    | 24 ++++++++++++-------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568-radxa-e25.dts b/arch/arm64/boot/dts/rockchip/rk3568-radxa-e25.dts
+index 63c4bd8..72ad74c 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3568-radxa-e25.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3568-radxa-e25.dts
+@@ -47,6 +47,9 @@
+ 		vin-supply = <&vcc5v0_sys>;
+ 	};
+ 
++	/* actually fed by vcc5v0_sys, dependent
++	 * on pi6c clock generator
++	 */
+ 	vcc3v3_minipcie: vcc3v3-minipcie-regulator {
+ 		compatible = "regulator-fixed";
+ 		enable-active-high;
+@@ -54,9 +57,9 @@
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&minipcie_enable_h>;
+ 		regulator-name = "vcc3v3_minipcie";
+-		regulator-min-microvolt = <5000000>;
+-		regulator-max-microvolt = <5000000>;
+-		vin-supply = <&vcc5v0_sys>;
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		vin-supply = <&vcc3v3_pi6c_05>;
+ 	};
+ 
+ 	vcc3v3_ngff: vcc3v3-ngff-regulator {
+@@ -71,9 +74,6 @@
+ 		vin-supply = <&vcc5v0_sys>;
+ 	};
+ 
+-	/* actually fed by vcc5v0_sys, dependent
+-	 * on pi6c clock generator
+-	 */
+ 	vcc3v3_pcie30x1: vcc3v3-pcie30x1-regulator {
+ 		compatible = "regulator-fixed";
+ 		enable-active-high;
+@@ -83,7 +83,7 @@
+ 		regulator-name = "vcc3v3_pcie30x1";
+ 		regulator-min-microvolt = <3300000>;
+ 		regulator-max-microvolt = <3300000>;
+-		vin-supply = <&vcc3v3_pi6c_05>;
++		vin-supply = <&vcc5v0_sys>;
+ 	};
+ 
+ 	vcc3v3_pi6c_05: vcc3v3-pi6c-05-regulator {
+@@ -99,6 +99,10 @@
+ 	};
+ };
+ 
++&combphy1 {
++	phy-supply = <&vcc3v3_pcie30x1>;
++};
++
+ &pcie2x1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pcie20_reset_h>;
+@@ -117,7 +121,7 @@
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pcie30x1m0_pins>;
+ 	reset-gpios = <&gpio0 RK_PC3 GPIO_ACTIVE_HIGH>;
+-	vpcie3v3-supply = <&vcc3v3_pcie30x1>;
++	vpcie3v3-supply = <&vcc3v3_minipcie>;
+ 	status = "okay";
+ };
+ 
+@@ -178,6 +182,10 @@
+ 	status = "okay";
+ };
+ 
++&sata1 {
++	status = "okay";
++};
++
+ &sdmmc0 {
+ 	bus-width = <4>;
+ 	cap-sd-highspeed;
+-- 
+2.40.1
+
