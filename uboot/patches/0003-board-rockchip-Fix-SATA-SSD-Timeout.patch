@@ -1,0 +1,56 @@
+From 76f3ec0c5f42fd08d24f697d827147d577d7c46c Mon Sep 17 00:00:00 2001
+From: John Clark <inindev@gmail.com>
+Date: Fri, 25 Aug 2023 09:56:17 +0000
+Subject: [PATCH 3/3] board: rockchip: Fix SATA SSD Timeout
+
+A timeout error was observed trying to boot with the following device:
+
+KingSpec M.2 SATA SSD, 128GB 2242 SATA III 6Gbps Internal M.2 SSD,
+Ultra-Slim NGFF State Drive
+https://www.amazon.com/dp/B07CJF384F
+
+Empirical testing reveals that ~1/4 second is needed to allow the device to power-up fully:
+
+215ms:
+=> setenv boot_targets scsi
+=> bootflow scan
+pcie_dw_rockchip pcie@fe280000: failed to enable vpcie3v3 (ret=-114)
+scanning bus for devices...
+SATA link 0 timeout.
+AHCI 0001.0300 32 slots 1 ports 6 Gbps 0x1 impl SATA mode
+flags: ncq stag pm led clo only pmp fbss pio slum part ccc apst
+timeout exit!
+
+220ms:
+=> setenv boot_targets scsi
+=> bootflow scan
+pcie_dw_rockchip pcie@fe280000: failed to enable vpcie3v3 (ret=-114)
+scanning bus for devices...
+Target spinup took 0 ms.
+AHCI 0001.0300 32 slots 1 ports 6 Gbps 0x1 impl SATA mode
+flags: ncq stag pm led clo only pmp fbss pio slum part ccc apst
+  Device 0: (0:0) Vendor: ATA Prod.: NT-128 2242 Rev: SN11
+            Type: Hard Disk
+            Capacity: 122104.3 MB = 119.2 GB (250069680 x 512)
+** Booting bootflow 'ahci_scsi.id0lun0.bootdev.part_1' with extlinux
+
+Signed-off-by: John Clark <inindev@gmail.com>
+---
+ arch/arm/dts/rk3568-radxa-e25.dts | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/dts/rk3568-radxa-e25.dts b/arch/arm/dts/rk3568-radxa-e25.dts
+index 72ad74c38a..f45f75a991 100644
+--- a/arch/arm/dts/rk3568-radxa-e25.dts
++++ b/arch/arm/dts/rk3568-radxa-e25.dts
+@@ -83,6 +83,7 @@
+ 		regulator-name = "vcc3v3_pcie30x1";
+ 		regulator-min-microvolt = <3300000>;
+ 		regulator-max-microvolt = <3300000>;
++		startup-delay-us = <225000>;
+ 		vin-supply = <&vcc5v0_sys>;
+ 	};
+ 
+-- 
+2.40.1
+

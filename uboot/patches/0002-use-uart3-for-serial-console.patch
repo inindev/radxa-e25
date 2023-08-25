@@ -1,7 +1,7 @@
 From f95d9b8fcfc6f6a0f76e396e9aba0ace3582a05e Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Tue, 15 Aug 2023 03:40:56 +0000
-Subject: [PATCH 2/2] use uart3 for serial console
+Subject: [PATCH 2/3] use uart3 for serial console
 
 Signed-off-by: John Clark <inindev@gmail.com>
 ---
